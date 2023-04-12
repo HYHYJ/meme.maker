@@ -3,19 +3,26 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d"); //getContext는 붓이다.
 canvas.width = 800;
 canvas.height = 800; //css랑 javascript에 둘다 쓰기.
+ctx.lineWidth = 2;
+let isPainting = false;
 
-//원 만들기
-ctx.fillRect(225, 200 -17, 15, 100);
-ctx.fillRect(340, 200 -17, 15, 100);
-ctx.fillRect(260, 200 -17, 60, 200);
+function onMove(event){
+    if (isPainting) { //isPainting이 true면 그림이 그려짐!
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.stroke();
+        return;
+    }
+    ctx.moveTo(event.offsetX, event.offsetY); //마우스있는 곳으로 브러쉬 움직임
+}
 
-ctx.arc(290, 130, 50, 0, 2* Math.PI); //ctx.arc(x, y, 반지름, starting angle, ending angle = 2* Math.PI);
-ctx.fill();
+function onMouseDown(){ //마우스를 누르면 true로 변함
+   isPainting = true;
+}
+function cancelPainting() { //마우스 때면 false여서 안그려짐
+    isPainting = false;
+}
 
-
-ctx.beginPath(); //새로운 색깔줄때 새로운 패스를 줘야한다.
-ctx.fillStyle = "blue"
-
-ctx.arc(270, 130 -5, 8, Math.PI, 2* Math.PI)
-ctx.arc(310, 130 -5, 8, Math.PI, 2* Math.PI)
-ctx.fill();
+canvas.addEventListener("mousemove", onMove);
+canvas.addEventListener("mousedown", onMouseDown); //a마우스를 누른채로 있는 것만
+canvas.addEventListener("mouseup", cancelPainting);
+canvas.addEventListener("mouseleave", cancelPainting); //캔버스 밖을 나가도 작동함.위랑 여기랑 onMouseUp을 사용

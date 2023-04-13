@@ -1,3 +1,6 @@
+const colorOptions = Array.from( //html의 배열을 Js의 배열로 만듬. Array.from으로 생성한다.
+    document.getElementsByClassName("color-option")
+);
 const color = document.getElementById("color");
 const lineWidth = document.getElementById("line-width");// html에서 만든 input 굵기 조절기 가져오기
 const canvas = document.querySelector("canvas");
@@ -34,6 +37,12 @@ function onColorChange (event) {
     ctx.fillStyle = event.target.value;
 }
 
+function onColorClick(event) {
+    const colorValue = event.target.dataset.color;
+    ctx.strokeStyle = colorValue; //위에 함수값 입혀주기
+    ctx.fillStyle = colorValue;
+    color.value = colorValue; //컬러 칸 말고 컬러피커칸의 색을 바꿔준다.
+}
 
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", onMouseDown); //a마우스를 누른채로 있는 것만
@@ -43,3 +52,6 @@ canvas.addEventListener("mouseleave", cancelPainting); //캔버스 밖을 나가
 
 lineWidth.addEventListener("change", onLineWidthChange);
 color.addEventListener("change", onColorChange);
+
+//colorOptions.forEach(); 이건 불가능. colorOptions은 HTML콜렉션이고 ArrayLike 객체지 Array가 아니다.
+colorOptions.forEach((color) => color.addEventListener("click", onColorClick)); //위에 Array.from 사용하고 사용가능. //각각을 color라고 이름 붙여줌

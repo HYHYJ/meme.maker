@@ -1,3 +1,4 @@
+const textInput = document.getElementById("text");
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
 const destroyBtn = document.getElementById("destroy-btn");
@@ -21,6 +22,7 @@ const ctx = canvas.getContext("2d"); //getContext는 붓이다.
 canvas.width = CANVAS_WIDTH; ///////////여기도 수정
 canvas.height = CANVAS_HEIGHT; //css랑 javascript에 둘다 쓰기.
 ctx.lineWidth = lineWidth.value; //html의 기본값을 다시 넣어줘야한다.
+ctx.lineCap = "round"; //선의 끝을 둥글게한다.
 let isPainting = false;
 let isFilling = false;
 
@@ -95,7 +97,20 @@ function onFileChange(event) {
     }
 
 }
+
+function onDoubleClick(event) {
+    const text =textInput.value;
+    if (text !=="") {
+    ctx.save(); //ctx의 현재상태, 색상, 스타일 등 모든것을 저장함.
+    ctx.lineWidth =1; // lineWidth를 바꾸면 브러쉬 굵기도 작아진다. 다시 되돌려야한다. = save 함수
+    ctx.font ="53px godic"; //폰트랑 크기 바꾸기
+    ctx.fillText(text, event.offsetX, event.offsetY) //strokeText or fillText
+    ctx.restore() //lineWidth를 바꿔도 이전 저장상태로 돌아가게하기. (save와 restore 사이에서는 정말 어떤 수정도 저장 안됌.)
+    //console.log(event.offsetX, event.offsetY); //마우스가 클릭한 좌표다.
+    }
+}
 // canvas.onmousemove = onMove   // 하단 줄이랑 같은 의미, 하단줄을 이용하는 이유는 같은 event안에 많은 event listener들을 추가, 삭제 가능
+canvas.addEventListener("dblclick", onDoubleClick) //mousedown,mouseup이 빨리될때
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);  //마우스를 누른채로 있는 것만
 canvas.addEventListener("mouseup", cancelPainting);

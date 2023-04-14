@@ -1,14 +1,26 @@
+const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
+const destroyBtn = document.getElementById("destroy-btn");
+const eraserBtn = document.getElementById("erase-btn");
+
+
+
 const colorOptions = Array.from(document.getElementsByClassName("color-option"));
 //html의 배열을 Js의 배열로 만듬. Array.from으로 생성한다.
 const color = document.getElementById("color");
 const lineWidth = document.getElementById("line-width");// html에서 만든 input 굵기 조절기 가져오기
 const canvas = document.querySelector("canvas");
 
+const CANVAS_WIDTH = 800; //Canvas 넓이와 높이를 800으로 맞춰줌
+const CANVAS_HEIGHT = 800;
+
+let filledColor = "white";
+
+
 const ctx = canvas.getContext("2d"); //getContext는 붓이다.
-canvas.width = 800;
-canvas.height = 800; //css랑 javascript에 둘다 쓰기.
-ctx.lineWidth = lineWidth.value;
+canvas.width = CANVAS_WIDTH; ///////////여기도 수정
+canvas.height = CANVAS_HEIGHT; //css랑 javascript에 둘다 쓰기.
+ctx.lineWidth = lineWidth.value; //html의 기본값을 다시 넣어줘야한다.
 let isPainting = false;
 let isFilling = false;
 
@@ -34,8 +46,8 @@ function onLineWidthChange(event) {
     
 }
 function onColorChange (event) {
-    ctx.strokeStyle = event.target.value;
-    ctx.fillStyle = event.target.value;
+    ctx.strokeStyle = event.target.value; //strokeStyle 선색깔
+    ctx.fillStyle = event.target.value; //fillStyle 채우기색깔
 }
 
 function onColorClick(event) {
@@ -50,16 +62,40 @@ function onModeClick(){ //그리기 채우기 모드 바꾸기
     isFilling = false //그리기 모드
     modeBtn.innerText ="Draw"
    } else {
-    isFilling = true //채우기모드
+    isFilling = true //채우기모드 
     modeBtn.innerText ="Fill"
    }
 }
 
 function onCanvasClick(){
     if(isFilling){
-      ctx.fillRect(0,0, 800, 800);
+      ctx.fillRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      filledColor = ctx.fillStyle;
     }
 }
+
+function onEraserClick(event) {
+    ctx.strokeStyle = filledColor;
+    isFilling = false;
+    modeBtn.innerHTML = "Fill";
+}
+
+function onDestroyClick() { //모두 한번에 지워주는 기능
+    ctx.fillStyle ="white"; //면적색상을 화이트로
+    ctx.fillRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT) //큰 캔버스크기의 사각형
+}
+function onFileChange(event) {
+   const file = event.target.files[0]; // 불러온 file url불러오기
+   const url = URL.createObjectURL(file); //file을 가리키는 url을 불러오기.
+   const image = new Image(); // = <img src="" /> 해당 줄이랑 하단 줄이 이걸 의미. 
+   image.src = url; //src 진짜 스펠링 조심하자.
+   image.onload = function () { // = image.addEventListener("onload", function);
+     ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT) ; // ctx.drawImage 캔버스에 이미지를 그려줌 (x좌표, y좌표, 사진 넓이, 높이)
+    fileInput.value =null;
+    }
+
+}
+// canvas.onmousemove = onMove   // 하단 줄이랑 같은 의미, 하단줄을 이용하는 이유는 같은 event안에 많은 event listener들을 추가, 삭제 가능
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);  //마우스를 누른채로 있는 것만
 canvas.addEventListener("mouseup", cancelPainting);
@@ -73,3 +109,8 @@ color.addEventListener("change", onColorChange);
 colorOptions.forEach((color) => color.addEventListener("click", onColorClick)); //위에 Array.from 사용하고 사용가능. //각각을 color라고 이름 붙여줌
 
 modeBtn.addEventListener("click", onModeClick)
+destroyBtn.addEventListener("click", onDestroyClick);
+eraserBtn.addEventListener("click", onEraserClick);
+fileInput.addEventListener("change", onFileChange)
+
+//click = mousedown + mouseup

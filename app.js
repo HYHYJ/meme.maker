@@ -1,3 +1,4 @@
+const saveBtn = document.getElementById("save");
 const textInput = document.getElementById("text");
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
@@ -109,6 +110,15 @@ function onDoubleClick(event) {
     //console.log(event.offsetX, event.offsetY); //마우스가 클릭한 좌표다.
     }
 }
+
+function onSaveClick() {
+    const url = canvas.toDataURL();
+    const a = document.createElement("a");
+    a.href = url;
+    a.download ="myDrawing.png";
+    a.click();
+}
+
 // canvas.onmousemove = onMove   // 하단 줄이랑 같은 의미, 하단줄을 이용하는 이유는 같은 event안에 많은 event listener들을 추가, 삭제 가능
 canvas.addEventListener("dblclick", onDoubleClick) //mousedown,mouseup이 빨리될때
 canvas.addEventListener("mousemove", onMove);
@@ -127,5 +137,4 @@ modeBtn.addEventListener("click", onModeClick)
 destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange)
-
-//click = mousedown + mouseup
+saveBtn.addEventListener("click", onSaveClick);

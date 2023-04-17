@@ -63,22 +63,21 @@ function onColorClick(event) {
 function onModeClick(){ //그리기 채우기 모드 바꾸기
    if(isFilling){ //이때 버튼이 눌리면 모드를 바꾸고 싶다는 의미.
     isFilling = false //그리기 모드
-    modeBtn.innerText ="Draw"
+    modeBtn.innerText ="🖌️Draw"
    } else {
     isFilling = true //채우기모드 
-    modeBtn.innerText ="Fill"
+    modeBtn.innerText ="🍋Fill"
    }
 }
 
 function onCanvasClick(){
     if(isFilling){
       ctx.fillRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
-      filledColor = ctx.fillStyle;
     }
 }
 
 function onEraserClick(event) {
-    ctx.strokeStyle = filledColor;
+    ctx.strokeStyle = "white";
     isFilling = false;
     modeBtn.innerHTML = "Fill";
 }
@@ -88,7 +87,7 @@ function onDestroyClick() { //모두 한번에 지워주는 기능
     ctx.fillRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT) //큰 캔버스크기의 사각형
 }
 function onFileChange(event) {
-   const file = event.target.files[0]; // 불러온 file url불러오기
+   const file = event.target.files[0]; // 불러온 file url불러오기 //베열인 이유는 html.input에 multiple이라는 속성을 추가할수있기 때문이다. multiple은 유저가 파일을 여러개 업도르 할수있다.
    const url = URL.createObjectURL(file); //file을 가리키는 url을 불러오기.
    const image = new Image(); // = <img src="" /> 해당 줄이랑 하단 줄이 이걸 의미. 
    image.src = url; //src 진짜 스펠링 조심하자.
@@ -111,12 +110,12 @@ function onDoubleClick(event) {
     }
 }
 
-function onSaveClick() {
-    const url = canvas.toDataURL();
-    const a = document.createElement("a");
-    a.href = url;
-    a.download ="myDrawing.png";
-    a.click();
+function onSaveClick() { //그림 저장하기
+    const url = canvas.toDataURL(); //컨버스의 사진 url을 받는다.
+    const a = document.createElement("a"); // a 가짜 링크달  앵컬을 생성한다. 
+    a.href = url; //링크를 걸어준다.
+    a.download ="myDrawing.png";  // 브라우저에게 href에서 다운로드 하라고 알리는 역할.
+    a.click(); //가짜클릭으로 a를 실행시키는 창이 뜬다.
 }
 
 // canvas.onmousemove = onMove   // 하단 줄이랑 같은 의미, 하단줄을 이용하는 이유는 같은 event안에 많은 event listener들을 추가, 삭제 가능
@@ -138,3 +137,11 @@ destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange)
 saveBtn.addEventListener("click", onSaveClick);
+
+//1. 텍스트의 폰트를 바꿔서 넣을 수 있게 바꾸기
+//2. 폰트 사이즈 바꿀 수 있게 하기
+//3. fill, stroke 바꾸기
+//4. 이미지가 정사각형이 아닐 시 화면 비율 깨지지 않게 만들 방법 생각해보기
+//5. 마우스 포인터가 fill-mode일때는 bucket, draw-mode일때는 pencil로 만들어보기
+//6. undo, redo 기능 만들어보기...
+//7. 말풍선을 넣고 텍스트를 넣는 기능 만들 생각 해보기

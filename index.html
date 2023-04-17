@@ -8,17 +8,8 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <canvas></canvas>
-    <input
-      id="line-width"
-      type="range"
-      minumum="1"
-      max="10"
-      value="5"
-      step="0.5"
-    />
-    <input type="color" id="color" />
-    <div>
+    <div class="color-options">
+      <input type="color" id="color" />
       <div
         class="color-option"
         style="background-color: #1abc9c"
@@ -56,11 +47,7 @@
         style="background-color: #e74c3c"
         data-color="#e74c3c"
       ></div>
-      <div
-        class="color-option"
-        style="background-color: #95a5a6"
-        data-color="#95a5a6"
-      ></div>
+
       <div
         class="color-option"
         style="background-color: #d35400"
@@ -82,13 +69,32 @@
         data-color="#e67e22"
       ></div>
     </div>
+    <canvas></canvas>
+    <div class="btns">
+      <div id="bush-size">
+        <span> 🖌️Brush-Size </span>
+      </div>
 
-    <button id="mode-btn">Fill</button>
-    <button id="destroy-btn">Destroy</button>
-    <button id="erase-btn">Erase</button>
-    <input type="file" accept="image/*" id="file" />
-    <button id="save">Save image</button>
-    <input type="text" placeholder="Write and then double click" id="text" />
+      <input
+        id="line-width"
+        type="range"
+        minumum="1"
+        max="10"
+        value="5"
+        step="0.5"
+      />
+
+      <button id="mode-btn">🍋Fill</button>
+      <button id="destroy-btn">🔥Destroy🔥</button>
+      <button id="erase-btn">👻Erase👻</button>
+      <label for="file">
+        <!--lable의 for과 input의 id 가 같으면 label 텍스트를 눌렀을때 input 실행, label 태그 밖에서도 실행가능(위치 상관 ㄴㄴ)-->
+        📸Add Photo📸
+      </label>
+      <input type="file" accept="image/*" id="file" />
+      <input type="text" placeholder="Add text here... :)" id="text" />
+      <button id="save">🎨Save image🎨</button>
+    </div>
     <script src="app.js"></script>
   </body>
 </html>
